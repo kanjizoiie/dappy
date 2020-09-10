@@ -1,0 +1,23 @@
+{
+  "name": "dappy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc -w --pretty -p tsconfig.json",
+    "build": "tsc -p tsconfig.json --pretty ",
+    "clean": "rm -r dist/",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^26.0.13",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.3.0"
+  },
+  "dependencies": {
+    "typescript": "^4.0.2"
+  }
+}

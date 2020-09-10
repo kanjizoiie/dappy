@@ -1,0 +1,3 @@
+interface Route {
+    Path: string
+}
