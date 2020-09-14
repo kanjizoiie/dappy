@@ -1,16 +1,30 @@
+import Dockerode from "dockerode";
 import "jest";
 
-import { connect } from "./docker";
-import Dockerode from "dockerode";
+import { Dockerizer } from "./docker";
 
 describe("Verify that we can connect to docker in different ways.", () => {
     it("Test with default docker connection over internal docker socket", () => {
-        const docker: Dockerode = connect();
-        expect(docker).toBeTruthy();
-    });
+        const docker: Dockerizer = new Dockerizer();
 
-    it("Test with web docker connection over localhost", () => {
-        const docker: Dockerode = connect("localhost");
-        expect(docker).toBeTruthy();
+        docker.getIsDockerConnected()
+            .then(result => {
+                expect(result).toBeTruthy();
+            })
+            .catch(result => {
+                fail(result);
+            })
+
     });
 })
+
+describe("Verify that we can connect to docker and run the hello world container.", () => {
+    it("Connect and run Hello World container.", () => {
+        const docker: Dockerizer = new Dockerizer();
+        docker.createNewContainer()
+            .then((container: Dockerode.Container) => {
+                expect(container).toBeTruthy();
+            })
+    });
+})
+
