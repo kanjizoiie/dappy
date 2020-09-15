@@ -8,11 +8,11 @@
     "postbuild": "",
     "build": "npm run tsc",
     
-    
-    "start": "tsc -w --pretty -p tsconfig.json",
+    "start:test": "jest --watch",
+    "start:dev": "tsc -w --pretty -p tsconfig.json",
+    "test": "jest --verbose",
     "tsc": "tsc -p tsconfig.json --pretty ",
-    "clean": "rm -r dist/",
-    "test": "jest"
+    "clean": "rm -r dist/"
   },
   "keywords": [],
   "author": "",
