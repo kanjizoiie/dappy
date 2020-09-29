@@ -64,6 +64,14 @@ describe("Verify that we can remove images from the local host", () => {
                 fail(reason);
             })
 
+        docker.removeContainers()
+            .then((container: Dockerode.Container) => {
+                expect(container).toBeTruthy();
+            })
+            .catch(reason => {
+                fail(reason);
+            })
+
         docker.removeImages()
             .then((container: Dockerode.Container) => {
                 expect(container).toBeTruthy();
