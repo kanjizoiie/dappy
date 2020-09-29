@@ -23,26 +23,16 @@ export class Dockerizer {
 
   async createNewContainer(image: string = "hello-world"): Promise<Dockerode.Container> {
     try {
+      const fetchedImage = await this.getImage(image);
       return this.docker.createContainer({
-        Image: image
+        Image: fetchedImage.id
       });
-    } catch (e) {
-      try {
-        const fetchedImage = await this.getImage(image);
-        try {
-          return this.docker.createContainer({
-            Image: fetchedImage.id
-          });
-        } catch (reason) {
-          throw reason;
-        }
-      } catch (reason_1) {
-        throw reason_1;
-      }
+    } catch (reason) {
+      throw reason;
     }
   }
 
-  async removeImages(filter?: (image: Dockerode.ImageInfo, index: number) => Dockerode.ImageInfo[]): Promise<Dockerode.ImageInfo[]>{
+  async removeImages(filter?: (image: Dockerode.ImageInfo, index: number) => Dockerode.ImageInfo[]): Promise<Dockerode.ImageInfo[]> {
     const imageInfos = await this.listImages(filter);
     imageInfos.map(async imageInfo => {
       const image = await this.getImage(imageInfo.Id);
@@ -50,7 +40,15 @@ export class Dockerizer {
     });
   }
 
-  removeImage(image: Dockerode.Image) : Promise<void> {
+  async removeContainers(filter?: (container: Dockerode.ContainerInfo, index: number) => Dockerode.ContainerInfo): Promise<Dockerode.ContainerInfo[]> {
+    const containerInfos = await this.listContainters(filter);
+    containerInfos.map(async containerInfo => {
+      const container = await this.getImage(containerInfo.Id);
+      this.removeImage(container);
+    });
+  }
+
+  removeImage(image: Dockerode.Image): Promise<void> {
     return image.remove();
   }
 
@@ -70,11 +68,11 @@ export class Dockerizer {
   }
 
 
-  pullImage(image: string, options?: {}) : Promise<Dockerode.Image> {
+  pullImage(image: string, options?: {}): Promise<Dockerode.Image> {
     return this.docker.pull(image, options);
   }
 
-  getImage(image: string, options?: {}) : Promise<Dockerode.Image> {
+  getImage(image: string, options?: {}): Promise<Dockerode.Image> {
     return this.docker.getImage(image) ? new Promise((resolve) => { resolve(this.docker.getImage(image)) }) : this.pullImage(image, options)
   }
 }
